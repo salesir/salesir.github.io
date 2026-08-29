@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="description" content="Portfolio of Arian Charkhgari — software developer building desktop tools, AI workflows, interactive systems, and Unity prototypes.">
+    <meta name="author" content="Arian Charkhgari">
+    <title>Arian Charkhgari — Software Developer</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap"
+          rel="stylesheet">
+
+    <!-- Stylesheets (order matters: tokens → reset → sections → animations) -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/projects.css">
+    <link rel="stylesheet" href="css/resume.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+
+<body class="grain">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <!-- ============================================
+         Navigation
+         ============================================ -->
+    <nav class="nav" id="nav" aria-label="Primary navigation">
+        <a class="nav__logo" href="#hero" aria-label="Arian Charkhgari — home">Arian Charkhgari</a>
+        <button class="nav__menu-toggle" id="navMenuToggle" type="button" aria-expanded="false" aria-controls="navLinks">
+            <span class="visually-hidden">Toggle navigation</span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </button>
+        <div class="nav__links" id="navLinks">
+            <a href="#hero"     class="nav__link">Home</a>
+            <a href="#projects" class="nav__link">Projects</a>
+            <a href="#resume"   class="nav__link">Resume</a>
+        </div>
+    </nav>
+
+    <main id="main-content">
+    <!-- ============================================
+         Section 1 — Hero / Introduction
+         ============================================ -->
+    <section class="hero" id="hero">
+        <canvas class="hero__particles" id="particles"></canvas>
+
+        <div class="hero__content">
+            <div class="hero__greeting">Hello, I'm</div>
+
+            <h1 class="hero__name">
+                <span class="hero__name-line">Arian Charkhgari</span>
+            </h1>
+
+            <div class="hero__title" aria-live="polite">
+                <span class="hero__title-text" id="typewriter"></span>
+                <span class="hero__cursor">|</span>
+            </div>
+
+            <p class="hero__tagline">
+                I build practical desktop tools, AI workflow systems, and interactive Unity experiences — with an eye for the technical details that make a product feel alive.
+            </p>
+
+            <div class="hero__cta">
+                <a href="#projectCodex" class="hero__btn hero__btn--primary" data-open-first-project>View My Work</a>
+                <a href="#resume"   class="hero__btn hero__btn--secondary">My Resume</a>
+            </div>
+
+            <a href="#projectsHeader" class="hero__scroll-indicator" aria-label="Scroll to projects">
+                <span>Scroll</span>
+                <span class="hero__scroll-line" aria-hidden="true"></span>
+            </a>
+        </div>
+
+    </section>
+
+    <!-- ============================================
+         Section 2 — Projects / The Codex
+         ============================================ -->
+    <section class="projects" id="projects" aria-labelledby="projects-heading">
+        <div class="projects__header" id="projectsHeader">
+            <h2 class="section-title" id="projects-heading">The Codex</h2>
+            <p class="section-subtitle">Six builds — pick one to read the engineering behind it</p>
+        </div>
+
+        <div class="codex" id="projectCodex">
+            <!-- Index: every project visible at once; tabs toggle the panel -->
+            <div class="codex__index" id="projectShelf" role="tablist" aria-label="Project index" aria-orientation="vertical">
+                <p class="codex__empty-state" id="emptyState">Loading the collection…</p>
+            </div>
+
+            <!-- Panel: the selected project, opened by default -->
+            <div class="codex__panel" id="projectBook">
+                <header class="codex__spec" id="projectSpec">
+                    <!-- Spec sheet is injected dynamically -->
+                </header>
+
+                <div class="codex__pages" id="bookPages" aria-live="polite">
+                    <!-- Case-study parts are injected dynamically -->
+                </div>
+
+                <div class="codex__page-nav" id="pageNav" hidden>
+                    <button class="codex__page-btn codex__page-btn--prev" id="prevPage" type="button">← Previous</button>
+                    <span class="codex__page-indicator" id="pageIndicator" aria-live="polite">Part 1 of 1</span>
+                    <button class="codex__page-btn codex__page-btn--next" id="nextPage" type="button">Next →</button>
+                </div>
+            </div>
+        </div>
+        <noscript><p class="projects__noscript">Enable JavaScript to open the interactive project case studies.</p></noscript>
+    </section>
+
+    <!-- ============================================
+         Section 3 — Resume Summary
+         ============================================ -->
+    <section class="resume" id="resume" aria-labelledby="resume-heading">
+        <div class="resume__container">
+            <h2 class="section-title" id="resume-heading">Resume</h2>
+            <p class="section-subtitle">A focused overview of the systems and experiences I build</p>
+
+            <div class="resume__grid">
+                <!-- Selected Work -->
+                <div class="resume__block resume__block--experience">
+                    <h3 class="resume__block-title">
+                        <span class="resume__block-icon">◆</span> Selected Work
+                    </h3>
+                    <div class="resume__timeline">
+                        <div class="resume__timeline-item">
+                            <div class="resume__timeline-dot"></div>
+                            <div class="resume__timeline-content">
+                                <h4>Custom Transformer Language Model</h4>
+                                <span class="resume__timeline-company">Independent Research · Python &amp; PyTorch</span>
+                                <span class="resume__timeline-date">2024 — 2026</span>
+                                <p>Built a decoder-only transformer language model from scratch in PyTorch — custom BPE tokenizer, fused QKV attention, RMSNorm and a SwiGLU feed-forward — the modern Llama-style recipe rather than the 2017 paper, with no Hugging Face scaffolding. Trained across <strong>1.5B+ tokens</strong> and <strong>383,000+ steps</strong> using fp16/bf16 mixed precision, gradient accumulation, and cosine LR scheduling with warmup, driving validation loss from <strong>5.81 down to a 1.2–1.4 band</strong> (≈3.4–4.0 perplexity) on held-out batches.</p>
+                            </div>
+                        </div>
+                        <div class="resume__timeline-item">
+                            <div class="resume__timeline-dot"></div>
+                            <div class="resume__timeline-content">
+                                <h4>Career Resource Center</h4>
+                                <span class="resume__timeline-company">Independent · Python, Flask &amp; pywebview</span>
+                                <span class="resume__timeline-date">2026</span>
+                                <p>Built a local-first desktop tool that helps job seekers with no technical background write a résumé, track openings, and rehearse interviews. Imports an existing résumé from <code>.docx</code>, <code>.pdf</code>, <code>.txt</code> or <code>.rtf</code> with a three-verdict validator that can answer &ldquo;unsure&rdquo; rather than guessing, exports a clean one-page PDF, and runs its assistant through a web-automation bridge so the organisation pays no per-seat API cost. Designed throughout for large type, high contrast, and plain language.</p>
+                            </div>
+                        </div>
+                        <div class="resume__timeline-item">
+                            <div class="resume__timeline-dot"></div>
+                            <div class="resume__timeline-content">
+                                <h4>CompanionUni: Desktop Companion</h4>
+                                <span class="resume__timeline-company">Interactive Systems · Unity 6 URP, C# &amp; Win32</span>
+                                <span class="resume__timeline-date">2024 — 2026</span>
+                                <p>Engineered an animated, transparent desktop companion rendered over Windows with alpha-preserving DX11/URP windowing. Reads Explorer&rsquo;s desktop icons across process boundaries via Win32 virtual memory calls, and executes real file operations through <code>SHFileOperation</code> on a recycle-bin-safe path.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="resume__block resume__block--education">
+                    <h3 class="resume__block-title">
+                        <span class="resume__block-icon">◆</span> Education
+                    </h3>
+                    <div class="resume__timeline">
+                        <div class="resume__timeline-item">
+                            <div class="resume__timeline-dot"></div>
+                            <div class="resume__timeline-content">
+                                <h4>B.S. in Computer Science</h4>
+                                <span class="resume__timeline-company">California State University, Fresno — Graduated May 2026</span>
+                                <span class="resume__timeline-date">Dean's List: Spring 2023 &amp; Spring 2025</span>
+                                <p><strong>Relevant Coursework:</strong> Advanced Computer Graphics, Computer Graphics, Game Development, Software Engineering (two-course sequence), Operating Systems, Systems &amp; Cloud Security, Computer Security, Internetworking &amp; Protocols, Algorithms &amp; Data Structures, Formal Languages &amp; Automata.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience & Training -->
+                <div class="resume__block resume__block--involvement">
+                    <h3 class="resume__block-title">
+                        <span class="resume__block-icon">◆</span> Experience &amp; Training
+                    </h3>
+                    <div class="resume__timeline">
+                        <div class="resume__timeline-item">
+                            <div class="resume__timeline-dot"></div>
+                            <div class="resume__timeline-content">
+                                <h4>Supplemental Instruction Leader</h4>
+                                <span class="resume__timeline-company">Fresno State Learning Center &mdash; Fresno, CA</span>
+                                <span class="resume__timeline-date">Aug 2024 &mdash; Dec 2024</span>
+                                <p>Led structured group study sessions for Conceptual Physics, coached study strategies, tracked attendance data, and coordinated with faculty to support at-risk students.</p>
+                            </div>
+                        </div>
+                        <div class="resume__timeline-item">
+                            <div class="resume__timeline-dot"></div>
+                            <div class="resume__timeline-content">
+                                <h4>Additional Training</h4>
+                                <span class="resume__timeline-company">Certifications &amp; technical community</span>
+                                <span class="resume__timeline-date">2023 &mdash; 2026</span>
+                                <p>AWS DeepRacer (reinforcement learning, autonomous model deployment) &middot; Kaggle Machine Learning courses (validation, feature engineering) &middot; CITI Program research training (research ethics, data privacy) &middot; Google Developer Student Club, Fresno State.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="resume__block resume__block--skills">
+                    <h3 class="resume__block-title">
+                        <span class="resume__block-icon">◆</span> Skills
+                    </h3>
+                    <div class="resume__skills-grid">
+                        <div class="resume__skill-category">
+                            <h4>Languages</h4>
+                            <div class="resume__skill-tags">
+                                <span class="resume__skill-tag">Python</span>
+                                <span class="resume__skill-tag">C++</span>
+                                <span class="resume__skill-tag">C#</span>
+                                <span class="resume__skill-tag">JavaScript</span>
+                                <span class="resume__skill-tag">HTML/CSS</span>
+                                <span class="resume__skill-tag">Haskell</span>
+                                <span class="resume__skill-tag">Assembly</span>
+                            </div>
+                        </div>
+                        <div class="resume__skill-category">
+                            <h4>AI &amp; Machine Learning</h4>
+                            <div class="resume__skill-tags">
+                                <span class="resume__skill-tag">PyTorch</span>
+                                <span class="resume__skill-tag">Transformer architecture</span>
+                                <span class="resume__skill-tag">BPE tokenization</span>
+                                <span class="resume__skill-tag">Mixed-precision training</span>
+                                <span class="resume__skill-tag">Hugging Face</span>
+                                <span class="resume__skill-tag">TensorFlow/JAX</span>
+                            </div>
+                        </div>
+                        <div class="resume__skill-category">
+                            <h4>Web</h4>
+                            <div class="resume__skill-tags">
+                                <span class="resume__skill-tag">React</span>
+                                <span class="resume__skill-tag">Vite</span>
+                                <span class="resume__skill-tag">WebView2</span>
+                            </div>
+                        </div>
+                        <div class="resume__skill-category">
+                            <h4>Systems &amp; Graphics</h4>
+                            <div class="resume__skill-tags">
+                                <span class="resume__skill-tag">Win32 API</span>
+                                <span class="resume__skill-tag">DirectX 11 / URP</span>
+                                <span class="resume__skill-tag">OpenGL</span>
+                                <span class="resume__skill-tag">CUDA</span>
+                                <span class="resume__skill-tag">Unity 6</span>
+                                <span class="resume__skill-tag">Godot</span>
+                            </div>
+                        </div>
+                        <div class="resume__skill-category">
+                            <h4>Tooling &amp; Security</h4>
+                            <div class="resume__skill-tags">
+                                <span class="resume__skill-tag">Git</span>
+                                <span class="resume__skill-tag">Docker</span>
+                                <span class="resume__skill-tag">Linux</span>
+                                <span class="resume__skill-tag">SQLite</span>
+                                <span class="resume__skill-tag">pytest</span>
+                                <span class="resume__skill-tag">PyInstaller</span>
+                                <span class="resume__skill-tag">Network forensics</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="resume__block resume__block--contact">
+                    <h3 class="resume__block-title">
+                        <span class="resume__block-icon">◆</span> Contact
+                    </h3>
+                    <div class="resume__contact-list">
+                        <a href="mailto:aryanartix@gmail.com" class="resume__contact-item">
+                            <span class="resume__contact-label">Email</span>
+                            <span class="resume__contact-value">aryanartix@gmail.com</span>
+                        </a>
+                        <a href="https://github.com/salesir" class="resume__contact-item" target="_blank" rel="noopener noreferrer">
+                            <span class="resume__contact-label">GitHub</span>
+                            <span class="resume__contact-value">github.com/salesir</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/arian-charkhgari" class="resume__contact-item" target="_blank" rel="noopener noreferrer">
+                            <span class="resume__contact-label">LinkedIn</span>
+                            <span class="resume__contact-value">in/arian-charkhgari</span>
+                        </a>
+                        <div class="resume__contact-item">
+                            <span class="resume__contact-label">Location</span>
+                            <span class="resume__contact-value">Orange County, CA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- ============================================
+         Footer
+         ============================================ -->
+    <footer class="footer">
+        <p>&copy; 2026 Arian Charkhgari. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts (order: dependencies → data → features → bootstrap) -->
+    <script src="js/particles.js"></script>
+    <script src="js/projects-data.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

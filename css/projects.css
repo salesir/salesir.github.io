@@ -1,0 +1,712 @@
+/* ============================================
+   Projects / The Codex
+
+   Two columns: a persistent index of every project on the left, and the
+   selected project's panel on the right. The panel grows to its content
+   rather than trapping a case study inside a fixed-height scroll box.
+   ============================================ */
+
+.projects {
+    padding: var(--space-3xl) var(--space-xl);
+    background: var(--color-bg-secondary);
+    position: relative;
+}
+
+/* Decorative divider */
+.projects::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-accent-primary), transparent);
+}
+
+.projects__noscript {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+/* ---- Layout ---- */
+
+/* The codex is a fixed-height reader: index on the left, panel on the right,
+   each scrolling independently. This is deliberate — if the panel grew to its
+   content, the page height would change every time a project was selected, and
+   moving from a long case study to a short one would visibly jump the viewport.
+   Holding the height constant means selecting a project moves nothing at all. */
+.codex {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(240px, 300px) 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+    height: calc(100vh - var(--nav-height) - var(--space-2xl));
+    min-height: 560px;
+    scroll-margin-top: calc(var(--nav-height) + var(--space-md));
+}
+
+@supports (height: 100svh) {
+    .codex {
+        height: calc(100svh - var(--nav-height) - var(--space-2xl));
+    }
+}
+
+/* ================================================
+   Index — every project readable without a click
+   ================================================ */
+
+.codex__index {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* Room for the scrollbar so chips never sit under it. */
+    padding-right: var(--space-xs);
+}
+
+.codex__empty-state {
+    padding: var(--space-lg);
+    text-align: center;
+    color: var(--color-text-muted);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+}
+
+.codex__empty-state[hidden] {
+    display: none;
+}
+
+.codex__tab {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid transparent;
+    border-radius: var(--radius-sm);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--transition-fast),
+                background var(--transition-fast),
+                transform var(--transition-fast);
+}
+
+.codex__tab:hover {
+    background: var(--color-bg-card);
+    border-color: var(--color-border-hover);
+    border-left-color: var(--color-accent-dim);
+    transform: translateX(3px);
+}
+
+.codex__tab.is-active {
+    background: var(--color-bg-card);
+    border-color: var(--color-border-hover);
+    border-left-color: var(--color-accent-primary);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.codex__tab-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+}
+
+.codex__tab-number {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+    transition: color var(--transition-fast);
+}
+
+.codex__tab.is-active .codex__tab-number {
+    color: var(--color-accent-primary);
+}
+
+.codex__tab-title {
+    flex: 1;
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.codex__tab.is-active .codex__tab-title,
+.codex__tab:hover .codex__tab-title {
+    color: var(--color-text-primary);
+}
+
+.codex__tab-year {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.codex__tab-summary {
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--color-text-muted);
+}
+
+.codex__tab-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.codex__tab-chip {
+    padding: 0.12rem 0.45rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    white-space: nowrap;
+}
+
+.codex__tab.is-active .codex__tab-summary {
+    color: var(--color-text-secondary);
+}
+
+.codex__tab.is-active .codex__tab-chip {
+    color: var(--color-accent-dim);
+    border-color: var(--color-border-hover);
+}
+
+/* ================================================
+   Panel — spec sheet first, long-form parts under it
+   ================================================ */
+
+.codex__panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+}
+
+/* Spec sheet and part navigation stay put; only the long-form parts scroll. */
+.codex__spec {
+    flex: none;
+}
+
+.codex__pages {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* Stop the browser re-anchoring scroll when the content swaps. */
+    overflow-anchor: none;
+}
+
+.codex__page-nav {
+    flex: none;
+}
+
+/* ---- Spec sheet ---- */
+
+.codex__spec {
+    padding: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+    background: linear-gradient(180deg, var(--color-bg-card) 0%, var(--color-bg-tertiary) 100%);
+}
+
+.codex__spec-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.codex__spec-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--color-text-primary);
+}
+
+.codex__spec-summary {
+    margin-top: var(--space-sm);
+    max-width: 62ch;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+}
+
+.codex__spec-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.codex__spec-fact dt {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 0.2rem;
+}
+
+.codex__spec-fact dd {
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+}
+
+/* ---- Parts ---- */
+
+.codex__page {
+    display: none;
+    padding: var(--space-xl);
+}
+
+.codex__page.is-active {
+    display: block;
+    animation: pageIn 0.45s var(--ease-out) both;
+}
+
+.codex__page-number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-accent-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.codex__page-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--color-text-primary);
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.codex__page-body {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+}
+
+.codex__page-lead {
+    font-size: 1.05rem;
+    color: var(--color-text-primary);
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+}
+
+/* Feature grid inside a part */
+.codex__features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+}
+
+.codex__feature-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+    transition: border-color var(--transition-fast);
+}
+
+.codex__feature-card:hover {
+    border-color: var(--color-border-hover);
+}
+
+.codex__feature-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--color-accent-primary);
+    margin-bottom: var(--space-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* One geometric marker per card, in the page's own accent — no emoji. */
+.codex__feature-title::before {
+    content: '';
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--color-accent-primary);
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+    opacity: 0.9;
+}
+
+/* ---- Plain-language line: what this is, for a non-technical reader ---- */
+
+.codex__plain {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-accent-secondary);
+}
+
+.codex__plain-mark {
+    flex: none;
+    width: 0.95rem;
+    height: 0.95rem;
+    background: linear-gradient(135deg, var(--color-accent-secondary), var(--color-accent-primary));
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+    animation: diamondSpin 4.5s linear infinite;
+}
+
+/* Inside a case-study part the line sits under the title, quieter. */
+.codex__page .codex__plain {
+    margin-top: 0;
+    margin-bottom: var(--space-lg);
+    padding-top: 0;
+    border-top: none;
+    color: var(--color-accent-primary);
+    font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .codex__plain-mark {
+        animation: none;
+    }
+}
+
+.codex__feature-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* Image showcase */
+.codex__image-container {
+    margin: var(--space-lg) 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.codex__image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform var(--transition-base);
+}
+
+.codex__image-container:hover img {
+    transform: scale(1.02);
+}
+
+.codex__image-caption {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-card);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+    letter-spacing: 0.05em;
+}
+
+/* Embedded demo video */
+.codex__video {
+    margin: 0 0 var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-bg-primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.codex__video video {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* A pulled-out design note inside a case study */
+.codex__callout {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md) var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent-primary);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-card);
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+}
+
+.codex__callout strong {
+    color: var(--color-accent-primary);
+}
+
+/* Passing-test line in a terminal block */
+.codex__pass {
+    color: #7fc9a0;
+    font-weight: 500;
+}
+
+/* Generated model output, shown verbatim */
+.codex__subhead {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--color-accent-primary);
+    letter-spacing: 0.02em;
+    margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.codex__sample {
+    margin: var(--space-md) 0 var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent-dim);
+    border-radius: var(--radius-sm);
+    overflow-x: auto;
+}
+
+.codex__sample code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Inline code inside case-study prose */
+.codex__page-body code,
+.codex__feature-desc code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.86em;
+    padding: 0.08em 0.35em;
+    border-radius: 3px;
+    background: var(--color-bg-primary);
+    color: var(--color-accent-dim);
+}
+
+/* The loss chart is a wide vector figure. Setting width explicitly here means
+   its scaling never depends on how the width/height attributes interact with
+   max-width, which is the usual source of aspect-ratio distortion. */
+.codex__image-container img[src$=".svg"] {
+    width: 100%;
+    height: auto;
+    background: var(--color-bg-tertiary);
+}
+
+/* Tech badges */
+.codex__tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin: var(--space-md) 0;
+}
+
+.codex__tech-pill {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.65rem;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    color: var(--color-accent-dim);
+    letter-spacing: 0.05em;
+}
+
+/* ---- Links ---- */
+
+.codex__project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.codex__project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.45rem 0.8rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent-primary);
+    border: 1px solid var(--color-border-hover);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-card);
+    transition: background var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.codex__project-link:hover {
+    color: var(--color-bg-primary);
+    background: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
+}
+
+/* ---- Part navigation ---- */
+
+.codex__page-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-xl);
+    background: var(--color-bg-card);
+    border-top: 1px solid var(--color-border);
+}
+
+.codex__page-nav[hidden] {
+    display: none;
+}
+
+.codex__page-btn {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    color: var(--color-accent-primary);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    transition: background var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.codex__page-btn:hover:not(:disabled) {
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    border-color: var(--color-accent-primary);
+}
+
+.codex__page-btn:disabled {
+    color: var(--color-text-muted);
+    border-color: transparent;
+    background: transparent;
+    cursor: default;
+}
+
+.codex__page-indicator {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+}
+
+/* ================================================
+   Responsive
+   ================================================ */
+
+@media (max-width: 900px) {
+    .codex {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 0;
+    }
+
+    /* The index stops being a sidebar and becomes a horizontal rail. */
+    .codex__index {
+        height: auto;
+        max-height: none;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: visible;
+        padding-bottom: var(--space-sm);
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Let the panel grow with its content again — on a phone the page itself
+       is the scroller, and the index sits above so nothing gets stranded. */
+    .codex__panel {
+        height: auto;
+    }
+
+    .codex__pages {
+        overflow-y: visible;
+    }
+
+    .codex__tab {
+        flex: 0 0 260px;
+        border-left: 1px solid var(--color-border);
+        border-bottom: 3px solid transparent;
+    }
+
+    .codex__tab:hover {
+        transform: none;
+        border-left-color: var(--color-border-hover);
+        border-bottom-color: var(--color-accent-dim);
+    }
+
+    .codex__tab.is-active {
+        border-left-color: var(--color-border-hover);
+        border-bottom-color: var(--color-accent-primary);
+    }
+}
+
+@media (max-width: 560px) {
+    .projects {
+        padding: var(--space-2xl) var(--space-md);
+    }
+
+    .section-subtitle {
+        margin-bottom: var(--space-xl);
+    }
+
+    .codex__tab {
+        flex-basis: 225px;
+    }
+
+    .codex__spec,
+    .codex__page {
+        padding: var(--space-lg);
+    }
+
+    .codex__page-nav {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .codex__page-indicator {
+        font-size: 0.75rem;
+    }
+
+    .codex__page-btn {
+        padding: var(--space-sm);
+        font-size: 0.72rem;
+    }
+}

@@ -1,0 +1,7 @@
+# Local backups and shelved drafts — not part of the published site
+_backup/
+js/_shelved-*
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

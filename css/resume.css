@@ -103,6 +103,74 @@
     margin-bottom: var(--space-xs);
 }
 
+/* Title and repo link share a line, wrapping together on narrow cards. */
+.resume__timeline-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-sm);
+}
+
+.resume__repo-link {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-accent-primary);
+    padding: 0.16rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.resume__repo-link:hover,
+.resume__repo-link:focus-visible {
+    color: var(--color-bg-primary);
+    background: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
+}
+
+/* ---- Portrait ---- */
+
+.resume__contact-layout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+}
+
+.resume__portrait {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.resume__portrait img {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    object-fit: cover;
+    /* The gold ring ties the photo to the rest of the palette and hides the
+       uneven edge of what was originally a wider snapshot. */
+    border: 1px solid var(--color-border-hover);
+    box-shadow: 0 0 0 5px var(--color-bg-tertiary),
+                0 0 0 6px var(--color-accent-glow),
+                0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.resume__portrait figcaption {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary);
+}
+
 .resume__timeline-company {
     font-size: 0.9rem;
     color: var(--color-accent-primary);
@@ -221,5 +289,11 @@
 
     .resume__contact-value {
         overflow-wrap: anywhere;
+    }
+
+    .resume__contact-layout {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: var(--space-lg);
     }
 }

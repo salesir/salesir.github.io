@@ -97,6 +97,32 @@ class ProjectCodex {
     }
 
     /**
+     * The whole panel scrolls on the wide layout, so "back to the top" means
+     * the panel, not the parts area. On the narrow layout the page is the
+     * scroller and both assignments are no-ops.
+     */
+    _resetReaderScroll() {
+        if (this.pagesEl) this.pagesEl.scrollTop = 0;
+        if (this.panel) this.panel.scrollTop = 0;
+    }
+
+    /**
+     * Park the reader at the first line of the parts, leaving the spec sheet
+     * scrolled just above. Turning a page should not send someone back past
+     * the header they have already read.
+     */
+    _scrollToPartsTop() {
+        if (this.pagesEl) this.pagesEl.scrollTop = 0;
+        if (!this.panel || !this.pagesEl) return;
+        if (this.panel.scrollHeight <= this.panel.clientHeight) return;
+
+        const offset = this.pagesEl.getBoundingClientRect().top
+            - this.panel.getBoundingClientRect().top
+            + this.panel.scrollTop;
+        this.panel.scrollTop = offset;
+    }
+
+    /**
      * Only the stacked (narrow) layout needs this. There the panel grows with
      * its content, so switching from a long case study to a short one can leave
      * the viewport parked past the end of the new one. On the wide layout the
@@ -361,7 +387,7 @@ class ProjectCodex {
         });
 
         this.pagesEl.replaceChildren(pages);
-        this.pagesEl.scrollTop = 0;
+        this._resetReaderScroll();
 
         /* Demo videos autoplay so the project shows itself the moment it opens,
            but nobody who asked the OS for less motion should get a moving image
@@ -421,9 +447,9 @@ class ProjectCodex {
         pages[this.activePage]?.classList.add('is-active');
         this._updateNav();
 
-        /* The parts area scrolls internally, so returning it to the top is all
-           that is needed on the wide layout. */
-        this.pagesEl.scrollTop = 0;
+        /* The panel scrolls internally, so landing on the new part is all that
+           is needed on the wide layout. */
+        this._scrollToPartsTop();
         this._scrollPanelIntoView();
 
         /* Brief lock so a held arrow key cannot outrun the enter animation. */

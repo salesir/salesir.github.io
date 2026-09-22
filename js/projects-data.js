@@ -910,6 +910,16 @@ not_resume  \u2192  refused, with the specific reason  \u2014 "this reads like a
                         A visual advantage-play simulator that visualizes how high-card clumps, slug cuts, and key cards propagate through standard multi-pass casino riffle and wash shuffles.
                     </p>
 
+                    <div class="codex__image-container">
+                        <img src="assets/blackjack-shuffle-tracking-drill.jpg" alt="Shuffle tracking drill showing ten source packets of thirty cards each, 300 cards in the drill, six set aside, and one pass at twenty percent card bleed" loading="lazy">
+                        <div class="codex__image-caption">The shuffle-tracking drill &mdash; 300 cards split into ten packets, then scored on whether the tracked slug is still where you think it is after a pass</div>
+                    </div>
+
+                    <div class="codex__image-container">
+                        <img src="assets/blackjack-hints-glossary.jpg" alt="Devil's Hints glossary with Shoe Penetration selected, showing what it is, how it is usually done and its impact, beside a list of methods including Insurance Count, Index Plays, Ace Side Count, Bet Spread and Rule Shopping" loading="lazy">
+                        <div class="codex__image-caption">Devil's Hints &mdash; every method gets a plain explanation of what it is, how it is actually done, and how much it matters</div>
+                    </div>
+
                     <div class="codex__features">
                         <div class="codex__feature-card">
                             <h4 class="codex__feature-title">Packet Mapping & Clumping</h4>

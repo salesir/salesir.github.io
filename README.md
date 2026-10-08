@@ -95,7 +95,7 @@ been reverted to match it; the codex redesign was kept. Read
 **Coursework is verified.** Every course in the "Relevant Coursework" line of
 `index.html` appears on the complete Fresno State transcript
 (`Downloads/FR_TRNS_RPTS.pdf`, printed 2026-08-28: 126 units, B.S. Computer
-Science conferred 2026-05-22). Dean's List Spring 2023 and Spring 2025 are both
+Science). Dean's List Spring 2023 and Spring 2025 are both
 on it. Re-check against that file before adding a course.
 
 The list is curated by **relevance to the projects shown on this site**, not by
